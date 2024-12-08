@@ -1,0 +1,17 @@
+// Example: Simple PID control loop in Arduino
+float Kp = 1.2, Ki = 0.1, Kd = 0.05;
+float setpoint = 0.0; // Desired angle
+float error, integral = 0, derivative, prevError = 0;
+float dt = 0.1;
+
+void loop() {
+  float measuredValue = readAngleFromSensor(); // Mock function
+  error = setpoint - measuredValue;
+  integral += error * dt;
+  derivative = (error - prevError) / dt;
+  float output = Kp * error + Ki * integral + Kd * derivative;
+  
+  applyMotorOutput(output); // Mock function
+  prevError = error;
+  delay(100); // Simulate dt
+}
