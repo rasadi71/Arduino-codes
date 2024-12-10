@@ -1,0 +1,41 @@
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+
+Adafruit_MPU6050 m_p_u;
+
+void setup() {
+    Serial.begin(115200);
+    
+
+    if (!m_p_u.begin()) {
+        Serial.println("Failed to initialize MPU6050 sensor!");
+        while (m_p_u.begin()==1) {
+            delay(20);
+        }
+    }
+}
+
+void loop() {
+    sensors_event_t acc, gyro, temp;
+    m_p_u.getEvent(&acc, &gyro, &temp);
+
+    // Print Acceleration Data
+    Serial.println("Acceleration (m/s^2):");
+    Serial.print("X: "); Serial.print(acc.acceleration.x);
+    Serial.print(", Y: "); Serial.print(acc.acceleration.y);
+    Serial.print(", Z: "); Serial.println(acc.acceleration.z);
+
+    // Print Gyroscope Data
+    Serial.println("Rotation (degrees/s):");
+    Serial.print("X: "); Serial.print(gyro.gyro.x * 180 / 3.14);
+    Serial.print(", Y: "); Serial.print(gyro.gyro.y * 180 / 3.14);
+    Serial.print(", Z: "); Serial.println(gyro.gyro.z * 180 / 3.14);
+
+    // Optional: Print Temperature
+    Serial.print("Temperature (°C): ");
+    Serial.println(temp.temperature);
+
+    Serial.println(); // Add a blank line for readability
+    delay(500);       // Delay to slow down output
+}
