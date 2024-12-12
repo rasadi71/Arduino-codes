@@ -1,0 +1,23 @@
+const int moisturePin = A0; // Analog pin for the soil moisture sensor
+const int dryLED = 8;      // Digital pin for dry LED
+const int wetLED = 7;      // Digital pin for wet LED
+
+void setup() {
+  pinMode(dryLED, OUTPUT);
+  pinMode(wetLED, OUTPUT);
+  Serial.begin(9600); // For debugging
+}
+
+void loop() {
+  int sensorValue = analogRead(moisturePin); // Read moisture sensor value
+  Serial.println(sensorValue);              // Print value to Serial Monitor
+
+  if (sensorValue < 500) { // Adjust threshold based on sensor reading
+    digitalWrite(dryLED, HIGH);
+    digitalWrite(wetLED, LOW);
+  } else {
+    digitalWrite(dryLED, LOW);
+    digitalWrite(wetLED, HIGH);
+  }
+  delay(500);
+}
