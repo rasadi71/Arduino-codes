@@ -1,23 +1,23 @@
-const int moisturePin = A0; // Analog pin for the soil moisture sensor
-const int dryLED = 8;      // Digital pin for dry LED
-const int wetLED = 7;      // Digital pin for wet LED
+#include <Servo.h>
+
+Servo myServo; // Create a servo object
+const int potPin = A0; // Potentiometer connected to A0
+const int servoPin = A4; // Servo motor connected to A4
 
 void setup() {
-  pinMode(dryLED, OUTPUT);
-  pinMode(wetLED, OUTPUT);
-  Serial.begin(9600); // For debugging
+  myServo.attach(servoPin); // Attach servo to pin A4
+  myServo.write(0); // Start the servo at 0 degrees
 }
 
 void loop() {
-  int sensorValue = analogRead(moisturePin); // Read moisture sensor value
-  Serial.println(sensorValue);              // Print value to Serial Monitor
+  int potValue = analogRead(potPin); // Read the potentiometer value (0-1023)
+  
+  // Map potentiometer value to delay (controls speed)
+  int speedDelay = map(potValue, 0, 1023, 20, 3); // Faster at higher values
 
-  if (sensorValue < 500) { // Adjust threshold based on sensor reading
-    digitalWrite(dryLED, HIGH);
-    digitalWrite(wetLED, LOW);
-  } else {
-    digitalWrite(dryLED, LOW);
-    digitalWrite(wetLED, HIGH);
-  }
-  delay(500);
+  // Rotate the servo incrementally
+  for (int angle = 0; angle <= 360; angle++) {
+    myServo.write(angle); // Move the servo to the current angle
+    delay(speedDelay);    // Adjust speed based on potentiometer
+  } 
 }
