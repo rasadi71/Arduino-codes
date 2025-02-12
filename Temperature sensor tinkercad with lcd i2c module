@@ -1,0 +1,50 @@
+#include <Wire.h>               // Correct include for Wire library
+#include <LiquidCrystal_I2C.h>  // Correct include for the LiquidCrystal_I2C library
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);  // Corrected constructor for LCD
+
+// Define the analog pin where TMP36 is connected
+const int sensorPin = A0;
+
+void setup() {
+  // Start the serial communication
+  Serial.begin(9600);
+  
+  // Initialize the LCD and turn on the backlight
+  lcd.init();
+  lcd.backlight();
+}
+
+void loop() {
+  // Read the analog value from the sensor
+  int sensorValue = analogRead(sensorPin);
+
+  // Convert the analog value to voltage (in mV)
+  float voltage = sensorValue * (5000.0 / 1023.0);
+
+  // Convert the voltage to temperature in Celsius
+  float temperatureC = (voltage - 500.0) / 10.0;
+
+  // Convert the temperature to Fahrenheit
+  float temperatureF = (temperatureC * 9.0 / 5.0) + 32.0;
+
+  // Print the results to the Serial Monitor
+  Serial.print("Temperature: ");
+  Serial.print(temperatureC);
+  Serial.print(" °C / ");
+  Serial.print(temperatureF);
+  Serial.println(" °F");
+
+  // Display the temperature on the LCD
+  lcd.setCursor(0, 0);  // Corrected to 'setCursor'
+  lcd.print(temperatureC);
+  lcd.print(" C");
+
+  lcd.setCursor(0, 1);  // Corrected to 'setCursor'
+  lcd.print(temperatureF);
+  lcd.print(" F");
+
+  // Wait for 1 second before the next reading
+  delay(1000);
+}
+
