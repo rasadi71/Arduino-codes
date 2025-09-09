@@ -1,0 +1,48 @@
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(13, OUTPUT); // buzzer
+  pinMode(4, OUTPUT);  // trig
+  pinMode(7, INPUT);   // echo
+  pinMode(11, OUTPUT); // led
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  float s,t;
+
+  // Sends a 2-microsecond LOW pulse to the sensor's trigger pin.
+  digitalWrite(4, LOW);
+  delayMicroseconds(2);
+
+  // Sends a 10-microsecond HIGH pulse to the sensor's trigger pin.
+  digitalWrite(4, HIGH);
+  delayMicroseconds(10);
+
+  // Sends a 2-microsecond LOW pulse to the sensor's trigger pin.
+  digitalWrite(4, LOW);
+  delayMicroseconds(2);
+
+  // Reads the duration of the HIGH pulse from the echo pin.
+  t = pulseIn(7, HIGH);
+
+  // Calculates the distance (s) in centimeters.
+  // The speed of sound is 0.034 cm/microsecond.
+  // The distance is halved because the sound travels to and from the object.
+  s=(0.034*t)/2;
+
+  // Checks if the object is closer than 10cm.
+  if(s<=10){
+    // If the object is too close, trigger a repeating tone and turn on the LED.
+    tone(13,1900);
+    delay(100);
+    noTone(13);
+    tone(13,1900);
+    delay(100);
+    digitalWrite(11, HIGH);
+  }
+  else{
+    // If the object is not too close, turn off the tone and the LED.
+    noTone(13);
+    digitalWrite(11,LOW);
+  }
+}
