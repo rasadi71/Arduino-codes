@@ -1,0 +1,30 @@
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+void setup() {
+  // put your setup code here, to run once:
+
+  //initialize lcd screen
+  lcd.init();
+
+  // turn on the backlight
+  lcd.backlight();
+}
+
+void loop() {
+  // Display initial text
+  lcd.setCursor(0, 0);
+  lcd.print("congrates .You have done it !!");
+
+  // Scroll the display left 16 times (to move the text off-screen)
+  for (int i = 0; i < 16; i++) {
+    lcd.scrollDisplayLeft();
+    delay(500); // Adjust delay (in milliseconds) for scroll speed
+  }
+
+  // Clear the display and reset for the next cycle
+  lcd.clear();
+  delay(1000); // Pause before restarting
+}
