@@ -1,0 +1,60 @@
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+
+// Define the sensor pins
+#define trigPin 4
+#define echoPin 7
+
+// Define the LCD address and dimensions
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// Variables for the sensor
+long duration;
+int distance;
+
+void setup() {
+  // Set up the LCD
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("Distance (cm):");
+
+  // Set up the sensor pins
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  // Initialize serial communication for debugging
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Clear the trigger pin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  // Send pulse
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read duration
+  duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance
+  distance = duration * 0.034 / 2;
+
+  // Print values to Serial Monitor for debugging
+  Serial.print("Duration: ");
+  Serial.print(duration);
+  Serial.print(" microseconds, Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // Display distance on LCD
+  lcd.setCursor(0, 1);
+  lcd.print("         "); // Clear previous value
+  lcd.setCursor(0, 1);
+  lcd.print(distance);
+
+  delay(500);
+}
